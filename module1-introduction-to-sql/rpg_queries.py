@@ -96,3 +96,14 @@ if __name__ == '__main__':
     """
     print("Average number of items per character:")
     print(execute_query(curs, query))
+
+    # On average, how many Weapons does each character have?
+    query="""
+    SELECT AVG(weapon_count) FROM
+	   (SELECT character_id, COUNT(item_id) AS weapon_count FROM
+	      (SELECT character_id, item_id, item_ptr_id FROM charactercreator_character_inventory, armory_weapon
+		   WHERE item_id=item_ptr_id)
+	    GROUP BY character_id)
+    """
+    print("Average number of weapons per character:")
+    print(execute_query(curs, query))
