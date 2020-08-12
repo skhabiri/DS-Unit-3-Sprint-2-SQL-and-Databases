@@ -53,6 +53,9 @@ pg1_curs.execute(create_table_statement)
 # update the cloud database
 pg1_conn.commit()
 
+# List all thee postgres tables in the connection
+pg_table_list(pg1_curs)
+
 # Inserting data into the table
 insert_statement = """
 INSERT INTO test_table (name, data) VALUES
@@ -160,3 +163,9 @@ pg_characters = pg1_curs.fetchall()
 
 for character, pg_character in zip(characters, pg_characters):
   assert character == pg_character
+
+# Closing out cursor/connection to wrap up
+pg1_curs.close()
+pg1_conn.close()
+sl1_curs.close()
+sl1_conn.close()
