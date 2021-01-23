@@ -138,4 +138,4 @@ If you need one more stretch goal - the RPG data was generated using
 facilitates tests by randomly generating data. Check it out, and if you got
 Django working, see if you can generate more data.
 
-![RPG Schema](./schema.jpg)
+![RPG Schema](./schema.png)
