@@ -143,7 +143,7 @@ _____
 **CRUD:** Stands for Create Read Update Delete are the main functionality of any web application that a database needs to support.
 
 ### sqlite3
-sqlite3 module is an API for data persistence via the SQLite - a simple disk-based database that doesn't require a separate server process. We use DB Browser for SQLite utility for ad hoc inspection and querying. 
+sqlite3 module is an API for data persistence via the SQLite - a simple disk-based database that doesn't require a separate server process. We use DB Browser for SQLite utility for ad hoc inspection and querying.
 
 **_Read_ operation in CRUD:**
 Here are the steps to make a query with sqlite3 in python repl.
@@ -161,7 +161,7 @@ Inserting data into columns of a table.
 ```
 import sqlite3
 conn = sqlite3.connect(‘test_db.sqlite3’)        # create a new db file
-create_statement =  ‘CREATE TABLE test (name char(20), age int);’ 
+create_statement =  ‘CREATE TABLE test (name char(20), age int);’
 curs = conn.cursor()
 curs.execute(create_statement)                # create the test table
 insert_statement = ‘INSERT INTO test (name, age) VALUES (“John”, 20);’
@@ -173,8 +173,8 @@ conn.commit()                                        # save the changes
 ```
 
 
-* For multiline string query we use triple double quotes instead of single quotes. 
-* Adding the keyword `EXPLAIN` to the beginning of a quote shows the internal steps that the SQL engine takes to execute the query. 
+* For multiline string query we use triple double quotes instead of single quotes.
+* Adding the keyword `EXPLAIN` to the beginning of a quote shows the internal steps that the SQL engine takes to execute the query.
 * Commenting out on sqlite is with `--`.
 * We can use the integer numbers 1, 2, .. to refer to columns in SELECT in the order they were declared.
 * Use comma to separate multiple values of the same kind in the query
@@ -191,7 +191,7 @@ conn.commit()                                        # save the changes
    * Note: cc: 302 rows, ai: 174 rows, cci=898 rows >> output=898 rows. In other word INNER JOIN does not group primary id columns.
 * How many items each character name has?
    * `SELECT character_name, COUNT(DISTINCT item_id) FROM
-      (SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id) 
+      (SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id)
       GROUP BY 1 ORDER BY 2 DESC;`
     * The character_name might not be unique. Meaning two different character ids might have the same character name so it’s better to group by a unique identifier such as character_id. We can check that by:
     * SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name, COUNT(DISTINCT cc.character_id) AS dn FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id GROUP BY character_name ORDER BY dn DESC
@@ -200,9 +200,11 @@ conn.commit()                                        # save the changes
 
 1. Open `rpg_db.sqlite3` in DB Browser for SQLite for visualizing the tables and running test queries. The rpg data includes some imaginary role play characters with items, weapons among other things assigned to them in different tables.
   * `rpg_queries.py`: runs some queries on the same database, according to the assignment section.
-  * `schema.png`: a picture of schema or data model 
+  * `schema.png`: a picture of schema or data model
   * `rpg_db_example`: lecture file with sqlite examples
   * `test_db.sqlite3`: a test db file created while creating it with rpg_db_example.py
 
-2. Number of reviews from different users on different topics are all in `buddymove_holidayiq.csv` file. 
+2. Number of reviews from different users on different topics are all in `buddymove_holidayiq.csv` file.
   * `Buddymove_holidayiq.py` is used to import the csv file into a dataframe and to create a table in sqlite, `buddymove_holidayiq.sqlite3`. The table can be opened with DB Browser for view. The queries on the dataset runs on the command line through the python file.
+
+![RPG Schema](./schema.png)
