@@ -196,7 +196,7 @@ conn.commit()                                        # save the changes
     * The character_name might not be unique. Meaning two different character ids might have the same character name so it’s better to group by a unique identifier such as character_id. We can check that by:
     * SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name, COUNT(DISTINCT cc.character_id) AS dn FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id GROUP BY character_name ORDER BY dn DESC
 
-### FIle Structure:
+### File Structure:
 
 1. Open `rpg_db.sqlite3` in DB Browser for SQLite for visualizing the tables and running test queries. The rpg data includes some imaginary role play characters with items, weapons among other things assigned to them in different tables.
   * `rpg_queries.py`: runs some queries on the same database, according to the assignment section.
@@ -208,3 +208,8 @@ conn.commit()                                        # save the changes
   * `Buddymove_holidayiq.py` is used to import the csv file into a dataframe and to create a table in sqlite, `buddymove_holidayiq.sqlite3`. The table can be opened with DB Browser for view. The queries on the dataset runs on the command line through the python file.
 
 ![RPG Schema](./schema.png)
+
+**Steps for running the queries on command prompt:**
+* `pipenv shell`  # entering the virtual environment
+* `cd module1-introduction-to-sql`
+* `python rpg_db_example.py or rpg_queries.py or buddymove_holidayiq.py`
