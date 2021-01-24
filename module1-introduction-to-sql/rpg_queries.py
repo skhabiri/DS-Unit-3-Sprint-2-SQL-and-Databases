@@ -45,15 +45,23 @@ if __name__ == '__main__':
     SELECT COUNT(item_ptr_id)
     FROM armory_weapon
     """
+    query2 = """
+    SELECT COUNT(DISTINCT item_id)
+    FROM armory_item, armory_weapon as aw
+    WHERE item_id=aw.item_ptr_id
+    """
     print("Total Weapons:")
     print(execute_query(curs, query))
+    print(execute_query(curs, query2))
 
     #How many of the Items are not weapons?
     query="""
     SELECT COUNT(*) FROM
-    (SELECT item_id  FROM armory_item WHERE item_id NOT IN  (SELECT item_ptr_id FROM armory_weapon));
+    (SELECT item_id  FROM armory_item WHERE item_id NOT IN  
+    (SELECT item_ptr_id FROM armory_weapon));
     """
-    query_alternative = """SELECT COUNT(*) FROM armory_item AS ai
+    query_alternative = """SELECT COUNT(DISTINCT item_id) 
+                            FROM armory_item AS ai
                             LEFT JOIN armory_weapon AS aw
                             ON ai.item_id=aw.item_ptr_id 
                             WHERE aw.item_ptr_id IS Null
@@ -65,7 +73,9 @@ if __name__ == '__main__':
     #How many of the Items are not weapons? alternative way
     query="""
     SELECT COUNT(item_id) FROM
-    (SELECT item_id FROM armory_item LEFT JOIN armory_weapon ON item_id=item_ptr_id WHERE item_ptr_id IS NULL)
+    (SELECT item_id FROM armory_item 
+    LEFT JOIN armory_weapon ON item_id=item_ptr_id 
+    WHERE item_ptr_id IS NULL)
     """
     print("Non Weapon items: alternative")
     print(execute_query(curs, query))
@@ -80,9 +90,13 @@ if __name__ == '__main__':
     print(execute_query(curs, query))
 
     #How many Weapons does each character have? (Return first 20 rows)
+    
+    # We only need to identify the columns by table.col if they are not
+    # unique between all tables
     query="""
     SELECT character_id, COUNT(item_id) FROM
-    (SELECT character_id, item_id, item_ptr_id FROM charactercreator_character_inventory, armory_weapon
+    (SELECT character_id, item_id, item_ptr_id 
+    FROM charactercreator_character_inventory, armory_weapon
     WHERE item_id=item_ptr_id)
     GROUP BY character_id ORDER BY 2 DESC LIMIT 20
     """
@@ -100,21 +114,24 @@ if __name__ == '__main__':
 
 
     # On average, how many Items does each Character have?
+    
+    # item_id does not pass up from subquery, so AVG(COUNT(item_id)) 
+    # instead of AVG(item_count) would not work
     query="""
     SELECT AVG(item_count) FROM
     (SELECT character_id, COUNT(item_id) AS item_count
     FROM charactercreator_character_inventory
-    GROUP BY 1 ORDER BY 2 DESC)
+    GROUP BY 1)
     """
     print("Average number of items per character:")
     print(execute_query(curs, query))
 
     # On average, how many Weapons does each character have?
     query="""
-    SELECT AVG(weapon_count) FROM 
-    (SELECT character_id, COUNT(item_id) AS weapon_count FROM 
-    (SELECT character_id, item_id, item_ptr_id FROM charactercreator_character_inventory, armory_weapon 
-    WHERE item_id=item_ptr_id) 
+    SELECT AVG(wp_cnt) FROM(
+    SELECT COUNT(item_ptr_id) AS wp_cnt
+    FROM charactercreator_character_inventory, armory_weapon
+    WHERE item_id = item_ptr_id
     GROUP BY character_id)
     """
 

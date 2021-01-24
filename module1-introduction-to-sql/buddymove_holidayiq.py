@@ -2,16 +2,20 @@ import pandas as pd
 # import numpy as np
 import sqlite3
 
+# Load .csv file into DataFrame
 data = pd.read_csv("./buddymove_holidayiq.csv")
 print(data.head())
 print(data.shape)
 print(f'Number of Nulls: {data.isna().sum(axis=0).sum()}')
 
+# Write from DataFrame into sqlite database
 conn = sqlite3.connect("buddymove_holidayiq.sqlite3")
 curs = conn.cursor()
 data.to_sql(name="review", con=conn, if_exists='replace')
 
 # Total number of reviews
+
+#User Id has a space and need to be inside a quote by itself
 query = """SELECT COUNT("User Id") FROM review"""
 curs.execute(query)
 result = curs.fetchall()
@@ -19,7 +23,7 @@ print(f'number of rows: {result}')
 
 # more than 100 review for nature and shopping
 query = """SELECT COUNT("USER Id") FROM review
-WHERE "Nature" >= 100 AND "Shopping" >= 100
+WHERE Nature >= 100 AND Shopping >= 100
 """
 curs.execute(query)
 result = curs.fetchall()

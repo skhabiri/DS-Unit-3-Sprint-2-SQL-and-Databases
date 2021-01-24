@@ -137,3 +137,72 @@ If you need one more stretch goal - the RPG data was generated using
 [django-autofixture](https://github.com/volrath/django-autofixture), a tool that
 facilitates tests by randomly generating data. Check it out, and if you got
 Django working, see if you can generate more data.
+
+_____
+
+**CRUD:** Stands for Create Read Update Delete are the main functionality of any web application that a database needs to support.
+
+### sqlite3
+sqlite3 module is an API for data persistence via the SQLite - a simple disk-based database that doesn't require a separate server process. We use DB Browser for SQLite utility for ad hoc inspection and querying. 
+
+**_Read_ operation in CRUD:**
+Here are the steps to make a query with sqlite3 in python repl.
+```
+import sqlite3
+conn = sqlite3.connect(`rpg_db.sqlite3’)        # connect to an existing db or create a new one
+curs = conn.cursor()                                # make a cursor to iterate over the db
+query = ‘SELECT * FROM armory_item;’        # write query
+curs.execute(query)                                # execute the query
+results = curs.fetchall()                        # fetch the results
+results[:5]                                        # results is a list of tuples, 1st 5 rows
+```
+**Create operation in CRUD:**
+Inserting data into columns of a table.
+```
+import sqlite3
+conn = sqlite3.connect(‘test_db.sqlite3’)        # create a new db file
+create_statement =  ‘CREATE TABLE test (name char(20), age int);’ 
+curs = conn.cursor()
+curs.execute(create_statement)                # create the test table
+insert_statement = ‘INSERT INTO test (name, age) VALUES (“John”, 20);’
+curs.execute(insert_statement)
+curs.execute(‘SELECT * FROM test;’)
+curs.fetchall()
+curs.close()                                        # closing up the cursor
+conn.commit()                                        # save the changes
+```
+
+
+* For multiline string query we use triple double quotes instead of single quotes. 
+* Adding the keyword `EXPLAIN` to the beginning of a quote shows the internal steps that the SQL engine takes to execute the query. 
+* Commenting out on sqlite is with `--`.
+* We can use the integer numbers 1, 2, .. to refer to columns in SELECT in the order they were declared.
+* Use comma to separate multiple values of the same kind in the query
+* Implicit join or JOIN by itself is an INNER JOIN by default.
+
+
+**examples:**
+
+* `SELECT name, COUNT(*) FROM charactercreator_character GROUP BY 1 ORDER BY 2 DESC LIMIT 5;`
+* ` SELECT character_id, name, rage FROM charactercreator_character INNER JOIN charactercreator_fighter ON character_id = charcter_ptr_id WHERE charcater_id BETWEEN 40 and 50`        -- this is an explicit inner join
+* ` SELECT character_id, name, rage FROM charactercreator_character, charactercreator_fighter WHERE character_id = charcter_ptr_id AND character_id BETWEEN 40 and 50;`        -- equivalent implicit join
+* Associate every character name with its item
+   * `SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id;`        -- implicit multi table join
+   * Note: cc: 302 rows, ai: 174 rows, cci=898 rows >> output=898 rows. In other word INNER JOIN does not group primary id columns.
+* How many items each character name has?
+   * `SELECT character_name, COUNT(DISTINCT item_id) FROM
+      (SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id) 
+      GROUP BY 1 ORDER BY 2 DESC;`
+    * The character_name might not be unique. Meaning two different character ids might have the same character name so it’s better to group by a unique identifier such as character_id. We can check that by:
+    * SELECT cc.character_id, cc.name AS character_name, ai.item_id, ai.name AS item_name, COUNT(DISTINCT cc.character_id) AS dn FROM charactercreator_character AS cc, armory_item AS ai, charactercreator_character_inventory AS cci WHERE cc.character_id = cci.character_id AND ai.item_id = cci.item_id GROUP BY character_name ORDER BY dn DESC
+
+### FIle Structure:
+
+1. Open `rpg_db.sqlite3` in DB Browser for SQLite for visualizing the tables and running test queries. The rpg data includes some imaginary role play characters with items, weapons among other things assigned to them in different tables.
+  * `rpg_queries.py`: runs some queries on the same database, according to the assignment section.
+  * `schema.png`: a picture of schema or data model 
+  * `rpg_db_example`: lecture file with sqlite examples
+  * `test_db.sqlite3`: a test db file created while creating it with rpg_db_example.py
+
+2. Number of reviews from different users on different topics are all in `buddymove_holidayiq.csv` file. 
+  * `Buddymove_holidayiq.py` is used to import the csv file into a dataframe and to create a table in sqlite, `buddymove_holidayiq.sqlite3`. The table can be opened with DB Browser for view. The queries on the dataset runs on the command line through the python file.
