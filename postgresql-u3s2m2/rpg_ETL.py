@@ -1,11 +1,12 @@
 import psycopg2
 import os
 import sqlite3
+from dotenv import load_dotenv
+from pathlib import Path
 
-dbname = 'wzptmnnk'
-user = 'wzptmnnk'
-password = 'YBpmqDjZo7ZChd-M7P0y5l9eZpkX6bfV'
-host = 'isilo.db.elephantsql.com'
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path, verbose=True)
+# load_dotenv(verbose=True)
 
 # Defining a function to refresh connection and cursor
 def refresh_connection_and_cursor():
@@ -13,8 +14,8 @@ def refresh_connection_and_cursor():
         pg1_curs.close()
         pg1_conn.close()
     except: pass
-    pg1_conn = psycopg2.connect(dbname=dbname, user=user,
-                              password=password, host=host)
+    pg1_conn = psycopg2.connect(dbname=os.getenv("dbname"), user=os.getenv("user"),
+                              password=os.getenv("password"), host=os.getenv("host"))
     pg1_curs = pg1_conn.cursor()
     return pg1_conn, pg1_curs
 
