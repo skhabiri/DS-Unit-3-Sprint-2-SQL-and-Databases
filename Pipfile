@@ -10,7 +10,6 @@ pandas = "*"
 psycopg2-binary = "*"
 pymongo = "*"
 dnspython = "*"
-pipfile = "*"
 
 [requires]
 python_version = "3.8"
