@@ -2,27 +2,22 @@
 
 The basics of Structured Query Language, a relatively simple query language.
 
-## Learning Objectives
+## Objectives
 
-- Write basic SQL queries to get specific subsets of data from a database and
-  answer basic "business questions"
+- Write basic SQL queries to get specific subsets of data from a database and answer basic "business questions"
 - Understand the purpose of SQL join, and perform joins to access data from
   multiple tables
 
-## Before Lecture
+## Preparation
 
 The Python Standard Library includes a module
 [sqlite3](https://docs.python.org/3/library/sqlite3.html), an API for data
 persistence via the SQLite - a simple disk-based database that doesn't require a
-separate server process. Read the tutorial, and try the given examples. See if
-you can modify them in simple ways, and come with questions!
+separate server process.
 
-Also, check out the [DB Browser for SQLite](https://sqlitebrowser.org) - we'll
-emphasize using `sqlite3` from Python so we can do things programmatically, but
-it is encouraged to install the DB Browser as a helpful utility for ad hoc
-inspection and querying.
+Also, check out the [DB Browser for SQLite](https://sqlitebrowser.org) - we'll emphasize using `sqlite3` from Python so we can do things programmatically, but it is encouraged to install the DB Browser as a helpful utility for ad hoc inspection and querying.
 
-## Live Lecture Task
+## Task
 
 We'll work together with SQLite in Python, making and exploring a simple
 database and trying a range of basic queries. Focus will be on the following SQL
@@ -39,14 +34,10 @@ data, and `INSERT` statements to put data into a table. And lastly, we'll learn
 how to calculate some basic statistics with `COUNT()`, `AVG()`, and `SUM()`,
 organized using the keyword `GROUP`.
 
-## Assignment - Part 1, Querying a Database
+## Work to do - Part 1, Querying a Database
 
-This directory contains a file `rpg_db.sqlite3`, a database for a hypothetical
-webapp role-playing game. This test data has dozens-to-hundreds of randomly
-generated characters across the base classes (Fighter, Mage, Cleric, and Thief)
-as well as a few Necromancers. Also generated are Items, Weapons, and
-connections from characters to them. Note that, while the name field was
-randomized, the numeric and boolean fields were left as defaults.
+This directory contains a file `rpg_db.sqlite3`, a database for a hypothetical webapp role-playing game. This test data has dozens-to-hundreds of randomly
+generated characters across the base classes (Fighter, Mage, Cleric, and Thief) as well as a few Necromancers. Also generated are Items, Weapons, and connections from characters to them. Note that, while the name field was randomized, the numeric and boolean fields were left as defaults.
 
 Use `sqlite3` to load and write queries to explore the data, and answer the
 following questions:
@@ -68,20 +59,15 @@ the main tables for Items and Characters respectively - the other tables are
 subsets of them by type (i.e. subclasses), connected via a key (`item_id` and
 `character_id`).
 
-You can use the DB Browser or other tools to explore the data and work on your
-queries if you wish, but to complete the assignment you should write a file
+While you can use the DB Browser or other tools to explore the data and work on your queries if you wish, but you should write a file
 `rpg_queries.py` that imports `sqlite3` and programmatically executes and
 reports results for the above queries.
 
-Some of these queries are challenging - that's OK! You can keep working on them
-tomorrow as well (we'll visit loading the same data into PostgreSQL). It's also
-OK to figure out the results partially with a query and partially with a bit of
-logic or math afterwards, though doing things purely with SQL is a good goal.
 [Subqueries](https://www.w3resource.com/sql/subqueries/understanding-sql-subqueries.php)
 and [aggregation functions](https://www.sqltutorial.org/sql-aggregate-functions/)
 may be helpful for putting together more complicated queries.
 
-## Assigment - Part 2, Making and populating a Database
+##  Part 2, Making and populating a Database
 
 Load the data (use `pandas`) from the provided file `buddymove_holidayiq.csv`
 (the [BuddyMove Data
@@ -102,13 +88,11 @@ Then write the following queries (also with `sqlite3`) to test:
 - Count how many rows you have - it should be 249!
 - How many users who reviewed at least 100 `Nature` in the category also
   reviewed at least 100 in the `Shopping` category?
-- (*Stretch*) What are the average number of reviews for each category?
+- What are the average number of reviews for each category?
 
-Your code (to reproduce all above steps) should be saved in
-`buddymove_holidayiq.py`, and added to the repository along with the generated
-SQLite database.
+Your code is saved in `buddymove_holidayiq.py`.
 
-## Resources and Stretch Goals
+## Resources
 
 For a more complicated example SQLite database with a number of tables to play
 with, check out this [SQLite Sample
@@ -133,7 +117,7 @@ mapping, a way to interact with SQL through programming language objects), and
 You'll find that the questions we answered with pure SQL are remarkably simple
 to answer using the ORM.
 
-If you need one more stretch goal - the RPG data was generated using
+The RPG data was generated using
 [django-autofixture](https://github.com/volrath/django-autofixture), a tool that
 facilitates tests by randomly generating data. Check it out, and if you got
 Django working, see if you can generate more data.
