@@ -18,7 +18,9 @@ def refresh_cc(conn=conn, c=c):
 # Table names in sqlite3
 def tab_names(c):
     names = []
-    res = c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    res = c.execute("SELECT name FROM sqlite_master WHERE type='table';")    
+    # adding fetchall() would clear res! would work with conn.execute as well
+    # print("inside function:\n", c.fetchall())
     for name in res:
         names.append(name[0])
 
@@ -44,6 +46,7 @@ def insertData(table, columns, values):
 conn, c = refresh_cc()
 names = tab_names(c)
 for name in names:
+    print(f'dropping ...\n {name}')
     c.execute(f"DROP TABLE {name}")
 conn.commit()
 
@@ -70,7 +73,10 @@ for value in values:
     c.execute(q)
 
 qfetch = "SELECT * FROM school_tab;"
-data = c.execute("SELECT * FROM school_tab;").fetchall()
+data = c.execute(qfetch).fetchall()
 print(data)
-
+print("\nsqlite schema:")
+print(c.execute('PRAGMA table_info(school_tab);').fetchall())
+c.close()
+conn.close()
 
