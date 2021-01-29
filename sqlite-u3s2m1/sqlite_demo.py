@@ -15,18 +15,33 @@ def create_table(conn):
     curs.close()
     conn.commit()
 def insert_data(conn):
-   my_data = [
+    my_data = [
        ('Malven', 7, 12),
        ('Dondre', -5, 101),
        ('Peggy', 14, 74)
-   ]
-   curs = conn.cursor()
-   for row in my_data:
-       pass
-       # Exercise - write an insert statement!
-   curs.close()
-   conn.commit()
+    ]
+    curs = conn.cursor()
+    for row in my_data:
+        query = f'INSERT INTO students (name, favorite_number, least_favorite_number) VALUES{row}'
+        print(query)
+        curs.execute(query)
+    curs.close()
+    conn.commit()
+
+
 if __name__ == '__main__':
     conn = sqlite3.connect('example_db.sqlite3')
+
+    # Table names in sqlite3
+    curs = conn.cursor()
+    res = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    print("\n\nTable names in sqlite3:")
+    for name in res:
+        print(name)
+        table_name = 'students'
+    query = f'DROP TABLE IF EXISTS {table_name}'
+    curs.execute(query)
+    curs.close()
+    
     create_table(conn)
     insert_data(conn)
